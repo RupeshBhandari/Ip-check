@@ -1,32 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>IP Information</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IP Info Viewer</title>
   <style>
+    :root {
+      --bg-color: #f5f7fa;
+      --text-color: #2c3e50;
+      --card-bg: #ffffff;
+      --link-color: #007acc;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg-color: #121212;
+        --text-color: #e0e0e0;
+        --card-bg: #1e1e1e;
+        --link-color: #4da3ff;
+      }
+    }
+
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
       padding: 2rem;
-      background-color: #f5f7fa;
-      color: #2c3e50;
+      background-color: var(--bg-color);
+      color: var(--text-color);
       max-width: 600px;
       margin: auto;
     }
+
     h1 {
       text-align: center;
       margin-bottom: 1rem;
     }
+
     .info {
-      background: white;
+      background-color: var(--card-bg);
       padding: 1rem 2rem;
       border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
     }
+
     .info p {
       margin: 0.5rem 0;
     }
-    .map-link {
-      margin-top: 1rem;
+
+    .map-link a {
+      color: var(--link-color);
+      text-decoration: none;
+    }
+
+    .map-link a:hover {
+      text-decoration: underline;
     }
   </style>
 </head>
@@ -37,7 +64,7 @@
   </div>
 
   <script>
-    fetch('https://ipinfo.io/json?token=') // You can add a token if you have one
+    fetch('https://ipinfo.io/json')
       .then(res => res.json())
       .then(data => {
         const infoBox = document.getElementById('ip-info');
@@ -54,7 +81,7 @@
           <p class="map-link"><a href="https://www.google.com/maps?q=${lat},${lon}" target="_blank">View on Google Maps</a></p>
         `;
       })
-      .catch(err => {
+      .catch(() => {
         document.getElementById('ip-info').innerHTML = '<p>Failed to load IP info.</p>';
       });
   </script>
