@@ -2,32 +2,60 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Check Your IP</title>
+  <title>IP Information</title>
   <style>
     body {
-      font-family: sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       padding: 2rem;
-      text-align: center;
-    }
-    #ip {
-      font-size: 1.5rem;
-      font-weight: bold;
+      background-color: #f5f7fa;
       color: #2c3e50;
+      max-width: 600px;
+      margin: auto;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    .info {
+      background: white;
+      padding: 1rem 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .info p {
+      margin: 0.5rem 0;
+    }
+    .map-link {
+      margin-top: 1rem;
     }
   </style>
 </head>
 <body>
-  <h1>Your IP Address</h1>
-  <p id="ip">Fetching...</p>
+  <h1>Your IP Info</h1>
+  <div class="info" id="ip-info">
+    <p>Loading info...</p>
+  </div>
 
   <script>
-    fetch('https://api.ipify.org?format=json')
-      .then(response => response.json())
+    fetch('https://ipinfo.io/json?token=') // You can add a token if you have one
+      .then(res => res.json())
       .then(data => {
-        document.getElementById('ip').textContent = data.ip;
+        const infoBox = document.getElementById('ip-info');
+        const [lat, lon] = data.loc.split(',');
+
+        infoBox.innerHTML = `
+          <p><strong>IP:</strong> ${data.ip}</p>
+          <p><strong>City:</strong> ${data.city}</p>
+          <p><strong>Region:</strong> ${data.region}</p>
+          <p><strong>Country:</strong> ${data.country}</p>
+          <p><strong>Timezone:</strong> ${data.timezone}</p>
+          <p><strong>ISP:</strong> ${data.org}</p>
+          <p><strong>Coordinates:</strong> ${data.loc}</p>
+          <p class="map-link"><a href="https://www.google.com/maps?q=${lat},${lon}" target="_blank">View on Google Maps</a></p>
+        `;
       })
-      .catch(() => {
-        document.getElementById('ip').textContent = 'Unable to fetch IP.';
+      .catch(err => {
+        document.getElementById('ip-info').innerHTML = '<p>Failed to load IP info.</p>';
       });
   </script>
 </body>
